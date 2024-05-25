@@ -6,7 +6,11 @@
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "server": "node server.js"
+    "server": "node server.js",
+    "migrate": "node ./database/actions/run-migrations.js",
+    "create-migration": "node ./database/actions/create-migrations.js",
+    "rollback": "node ./database/actions/rollback-migrations.js",
+    "seed": "node ./database/seeds/seed.js"
   },
   "author": {
     "name": "Nathaniel Osei",
@@ -24,6 +28,7 @@
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "mysql2": "^3.9.7",
+    "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
     "yup": "^1.4.0"
   },

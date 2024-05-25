@@ -4,9 +4,14 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import morgan from 'morgan';
+import './utils/scheduler.js';
 
 // import userRoutes from './routes/userRoutes.js';
 // import appLinksRoutes from './routes/appLinksRoutes.js';
+import userRoutes from './routes/userRoutes.js';
+import campaignsRoutes from './routes/campaignsRoutes.js';
+import campaignRecipientsRoutes from './routes/campaignRecipientsRoutes.js';
+import segmentsRoutes from './routes/segmentsRoutes.js';
 
 dotenv.config();
 
@@ -30,6 +35,10 @@ const createApp = () => {
 
   // app.use('/api/v1/users', userRoutes);
   // app.use('/api/v1/app', appLinksRoutes);
+  app.use('/api/v1/users', userRoutes);
+  app.use('/api/v1/campaigns', campaignsRoutes);
+  app.use('/api/v1/campaign-recipients', campaignRecipientsRoutes);
+  app.use('/api/v1/segments', segmentsRoutes);
 
   app.use((err, req, res, next) => {
     console.error(err.stack);
