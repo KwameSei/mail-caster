@@ -22,7 +22,7 @@ class User {
       last_name,
       email,
       password,
-      segment_id,
+      segment_id: segment_id || 1,
       is_admin,
     };
 
