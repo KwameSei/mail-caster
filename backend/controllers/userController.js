@@ -12,6 +12,8 @@ class UserController {
     try {
       const { first_name, last_name, email, password, segment_id, is_admin } = req.body;
 
+      console.log('User data', req.body);
+
       // Validate user input
       if (!first_name || !last_name || !email || !password) {
         return res.status(400).json({

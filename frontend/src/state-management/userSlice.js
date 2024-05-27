@@ -5,7 +5,7 @@ const initialState = {
     users: [],
     token: localStorage.getItem('token') || null,
     currentUser: JSON.parse(localStorage.getItem('user')) || null,
-    currentRole: (JSON.parse(localStorage.getItem('user')) || {}).role || null,
+    currentRole: (JSON.parse(localStorage.getItem('isAdmin')) || {}).role || null,
     isAuthenticated: false,
     isLoading: false,
     error: null,
@@ -18,7 +18,7 @@ const userSlice = createSlice({
         userLoading: (state) => {
             state.isLoading = true;
         },
-        userLoaded: (state, action) => {
+        userAuth: (state, action) => {
             state.isAuthenticated = true;
             state.isLoading = false;
             state.user = action.payload.user;
@@ -28,7 +28,7 @@ const userSlice = createSlice({
             localStorage.setItem('token', action.payload.token);
             localStorage.setItem('user', JSON.stringify(action.payload.user));
         },
-        usersLoaded: (state, action) => {
+        usersAuth: (state, action) => {
             state.isLoading = false;
             state.users = action.payload;
             state.error = null;
@@ -64,8 +64,8 @@ const userSlice = createSlice({
 
 export const {
     userLoading,
-    userLoaded,
-    usersLoaded,
+    userAuth,
+    usersAuth,
     userError,
     authError,
     userLogout,
