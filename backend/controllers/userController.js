@@ -11,44 +11,50 @@ class UserController {
   static async signUp(req, res) {
     try {
       const { first_name, last_name, email, password, segment_id, is_admin } = req.body;
-
-      console.log('User data', req.body);
-
+  
+      console.log('Request body:', req.body);
+  
       // Validate user input
       if (!first_name || !last_name || !email || !password) {
+        console.log('Validation failed:', { first_name, last_name, email, password });
         return res.status(400).json({
           message: 'All fields are required'
         });
       }
-
+  
       const emailToLower = email.toLowerCase();
-
+  
       // Check if user already exists
       const userExists = await User.getUserByEmail(emailToLower);
       if (userExists) {
+        console.log('User already exists:', emailToLower);
         return res.status(400).json({
           success: false,
           status: 400,
           message: 'User already exists'
         });
       }
-
+  
       // Check password length
       if (password.length < 6) {
+        console.log('Password length validation failed:', password.length);
         return res.status(400).json({
           success: false,
           status: 400,
           message: 'Password must be at least 6 characters long'
         });
       }
-
+  
       // Hash password
       const salt = bcrypt.genSaltSync(10);
-      const hashedPassword = bcrypt.hash(password, salt);
-
-      // Create user
-      const user = await User.createUser(first_name, last_name, emailToLower, hashedPassword, segment_id, is_admin);
-
+      const hashedPassword = bcrypt.hashSync(password, salt);
+  
+      // Ensure segment_id is a number
+      const segmentIdInt = parseInt(segment_id, 10);
+  
+      const user = await User.createUser(first_name, last_name, emailToLower, hashedPassword, segmentIdInt, is_admin);
+      console.log('User created successfully:', user);
+  
       // Create token
       const token = jsonwebtoken.sign(
         {
@@ -58,7 +64,7 @@ class UserController {
         }, 
         process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRES_IN }
       );
-
+  
       // Send response
       return res.status(201).json({
         success: true,
@@ -68,13 +74,14 @@ class UserController {
         data: user
       });
     } catch (error) {
+      console.error('Error during signup:', error);
       return res.status(500).json({
         success: false,
         status: 500,
         message: error.message
       });
     }
-  }
+  }    
 
   // User Sign In
   static async signIn(req, res) {

@@ -20,13 +20,15 @@ class Campaigns {
       name,
       content,
       scheduled_time,
-      segment_id,
+      segment_id: parseInt(segment_id, 10),
       user_id,
     };
 
     try {
       await campaignsSchema.validate(campaign);
-      const result = await connection("campaigns").insert(campaign);
+      const [campaignId] = await connection("campaigns").insert(campaign, 'id');  // Insert the campaign and get the inserted id
+      const result = await connection("campaigns").where('id', campaignId).first();
+      
       return result;
     } catch (error) {
       // Handle validation errors

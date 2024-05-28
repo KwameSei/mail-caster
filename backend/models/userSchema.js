@@ -8,27 +8,31 @@ const userSchema = yup.object().shape({
   last_name: yup.string().required(),
   email: yup.string().email().required(),
   password: yup.string().required(),
-  segment_id: yup.number().required(),
-  is_admin: yup.boolean(),
+  segment_id: yup.number().default(1),
+  is_admin: yup.boolean().default(false),
   created_at: yup.date(),
   updated_at: yup.date(),
 });
 
 // Define the model for the user
 class User {
-  static async createUser(first_name, last_name, email, password, segment_id, is_admin) {
+  static async createUser(first_name, last_name, email, password, segment_id, is_admin = false) {
     const user = {
       first_name,
       last_name,
       email,
       password,
-      segment_id: segment_id || 1,
+      segment_id: parseInt(segment_id, 10),
       is_admin,
     };
 
     try {
       await userSchema.validate(user);
-      const result = await connection("users").insert(user);
+      console.log('Inserting user:', user);
+      const [userId] = await connection("users").insert(user, 'id');
+
+      const result = await connection("users").where('id', userId ).first(); // Get the inserted user
+
       return result;
     } catch (error) {
       // Handle validation errors
@@ -52,10 +56,7 @@ class User {
       const user = await connection("users").where({ email }).first();
 
       if (!user) {
-        throw {
-          status: 404,
-          message: "User not found",
-        };
+        return null;
       }
       
       return user;

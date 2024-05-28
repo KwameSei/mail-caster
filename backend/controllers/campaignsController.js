@@ -5,10 +5,20 @@ import Segments from "../models/segmentsSchema.js";
 class CampaignsController {
   // Create campaign
   static async createCampaign(req, res) {
-    const { name, content, scheduled_time, segment_id, user_id } = req.body;
-
     try {
-      const result = await Campaigns.createCampaign(name, content, scheduled_time, segment_id, user_id);
+      const { name, content, scheduled_time, segment_id, user_id } = req.body;
+
+      if (!name || !content || !scheduled_time) {
+        return res.status(400).json({
+          success: false,
+          status: 400,
+          message: "Please provide all required fields",
+        });
+      }
+
+      const segmentId = parseInt(segment_id);
+      
+      const result = await Campaigns.createCampaign(name, content, scheduled_time, segmentId, user_id);
 
       if (!result) {
         return res.status(400).json({

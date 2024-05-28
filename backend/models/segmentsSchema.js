@@ -20,7 +20,10 @@ class Segments {
 
     try {
       await segmentsSchema.validate(segment);
-      const result = await connection("segments").insert(segment);
+      const segmentId = await connection("segments").insert(segment);
+      
+      const result = await connection("segments").where("id", segmentId).first();
+
       return result;
     } catch (error) {
       // Handle validation errors

@@ -12,6 +12,8 @@ import {
   DialogTitle,
   IconButton,
   InputAdornment,
+  MenuItem,
+  Select,
   TextField
 } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -39,6 +41,7 @@ const Auth = () => {
   
   const currentUser = useSelector((state) => state.user.currentUser);
   const isLoading = useSelector((state) => state.user.isLoading);
+  console.log('isLoading', isLoading);
   const error = useSelector((state) => state.user.error);
   const token = useSelector((state) => state.user.token);
   const role = useSelector((state) => state.user.currentRole);
@@ -67,14 +70,14 @@ const Auth = () => {
     }
   }, [error]);
 
-  const fields = [
+  const fields = {
     first_name,
     last_name,
     email,
     password,
-    confirmPassword,
-    segment_id
-  ];
+    segment_id,
+    is_admin
+  };
 
   const handleShowPassword = () => {
     setShowPassword(!showPassword);
@@ -154,22 +157,26 @@ const Auth = () => {
       <div className={classes.authContainer}>
         <h1>{title}</h1>
         <form className={classes.authForm} onSubmit={handleSubmit}>
-          <TextField
-            label="First Name"
-            variant="outlined"
-            type="text"
-            value={first_name}
-            onChange={(e) => setFirstName(e.target.value)}
-            required
-          />
-          <TextField
-            label="Last Name"
-            variant="outlined"
-            type="text"
-            value={last_name}
-            onChange={(e) => setLastName(e.target.value)}
-            required
-          />
+          {isRegistered && (
+            <>
+              <TextField
+                label="First Name"
+                variant="outlined"
+                type="text"
+                value={first_name}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+              />
+              <TextField
+                label="Last Name"
+                variant="outlined"
+                type="text"
+                value={last_name}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+              />
+            </>
+          )}
           <TextField
             label="Email"
             variant="outlined"
@@ -196,6 +203,7 @@ const Auth = () => {
             }}
           />
           {isRegistered && (
+            <>
             <TextField
               label="Confirm Password"
               variant="outlined"
@@ -213,16 +221,26 @@ const Auth = () => {
                 ),
               }}
             />
-          )}
-          {isRegistered && (
-            <TextField
+
+            <Select
               label="Segment ID"
               variant="outlined"
-              type="text"
               value={segment_id}
               onChange={(e) => setSegmentId(e.target.value)}
               required
-            />
+            >
+              <MenuItem disabled>Select Your Interest</MenuItem>
+              <MenuItem value="1">General</MenuItem>
+              <MenuItem value="2">Entertainment</MenuItem>
+              <MenuItem value="3">Sports</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
+              <MenuItem value="6">6</MenuItem>
+              <MenuItem value="7">7</MenuItem>
+              <MenuItem value="8">8</MenuItem>
+              <MenuItem value="9">9</MenuItem>
+            </Select>
+            </>
           )}
           <div className={classes.authButtons}>
             <BlueButton type="submit">
