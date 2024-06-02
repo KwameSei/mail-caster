@@ -15,12 +15,12 @@ const campaignSlice = createSlice({
     campaignLoading: (state) => {
       state.isLoading = true;
     },
-    campaignLoaded: (state, action) => {
+    getCampaign: (state, action) => {
       state.isLoading = false;
       state.campaign = action.payload;
       state.error = null;
     },
-    campaignsLoaded: (state, action) => {
+    getCampaigns: (state, action) => {
       state.isLoading = false;
       state.campaigns = action.payload;
       state.error = null;
@@ -34,5 +34,13 @@ const campaignSlice = createSlice({
     },
   },
 });
+
+export const {
+  campaignLoading,
+  getCampaign,
+  getCampaigns,
+  campaignError,
+  campaignResponse,
+} = campaignSlice.actions;
 
 export const campaignReducer = campaignSlice.reducer;

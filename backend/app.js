@@ -12,6 +12,7 @@ import userRoutes from './routes/userRoutes.js';
 import campaignsRoutes from './routes/campaignsRoutes.js';
 import campaignRecipientsRoutes from './routes/campaignRecipientsRoutes.js';
 import segmentsRoutes from './routes/segmentsRoutes.js';
+import gmailAPIRoutes from './routes/gmailAPIRoutes.js';
 
 dotenv.config();
 
@@ -39,6 +40,7 @@ const createApp = () => {
   app.use('/api/v1/campaigns', campaignsRoutes);
   app.use('/api/v1/campaign-recipients', campaignRecipientsRoutes);
   app.use('/api/v1/segments', segmentsRoutes);
+  app.use('/api/v1/gmail', gmailAPIRoutes);
 
   app.use((err, req, res, next) => {
     console.error(err.stack);

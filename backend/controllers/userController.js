@@ -144,6 +144,34 @@ class UserController {
     }
   }
 
+  // Get users
+  static async getUsers(req, res) {
+    try {
+      const users = await User.getUsers();
+
+      if (!users) {
+        return res.status(404).json({
+          success: false,
+          status: 404,
+          message: 'Users not found'
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        status: 200,
+        message: 'Users successfully fetched',
+        data: users
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        status: 500,
+        message: error.message
+      });
+    }
+  }
+
   // Get user segment
   static async getUserSegment(req, res) {
     try {

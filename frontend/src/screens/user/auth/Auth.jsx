@@ -108,7 +108,7 @@ const Auth = () => {
       dispatch(userAuth(user));
       isLoading(false);
       toast.success('User registered successfully');
-      navigate('/');
+      navigate('/user-dashboard');
     } catch (error) {
       console.error('Error registering user', error);
       dispatch(userError(error.response.data.message));
@@ -231,8 +231,8 @@ const Auth = () => {
             >
               <MenuItem disabled>Select Your Interest</MenuItem>
               <MenuItem value="1">General</MenuItem>
-              <MenuItem value="2">Entertainment</MenuItem>
-              <MenuItem value="3">Sports</MenuItem>
+              <MenuItem value="2">Sports</MenuItem>
+              <MenuItem value="3">Politics</MenuItem>
               <MenuItem value="4">4</MenuItem>
               <MenuItem value="5">5</MenuItem>
               <MenuItem value="6">6</MenuItem>

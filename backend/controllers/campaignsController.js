@@ -6,9 +6,35 @@ class CampaignsController {
   // Create campaign
   static async createCampaign(req, res) {
     try {
-      const { name, content, scheduled_time, segment_id, user_id } = req.body;
+      const {
+        subject,
+        content,
+        type,
+        status,
+        segment_id,
+        user_id,
+        scheduled_date,
+        scheduled_time,
+        scheduled_timezone,
+        created_at,
+        updated_at,
+      } = req.body;
 
-      if (!name || !content || !scheduled_time) {
+      console.log('Request body', req.body);
+
+      if (
+        !subject || 
+        !content || 
+        !type || 
+        !status || 
+        !segment_id || 
+        !user_id || 
+        !scheduled_date || 
+        !scheduled_time || 
+        !scheduled_timezone ||
+        !created_at || 
+        !updated_at
+      ) {
         return res.status(400).json({
           success: false,
           status: 400,
@@ -16,10 +42,23 @@ class CampaignsController {
         });
       }
 
-      const segmentId = parseInt(segment_id);
+      const segmentId = parseInt(segment_id, 10);
+      const userId = parseInt(user_id, 10);
       
-      const result = await Campaigns.createCampaign(name, content, scheduled_time, segmentId, user_id);
-
+      const result = await Campaigns.createCampaign(
+        subject,
+        content,
+        type,
+        status,
+        segmentId,
+        userId,
+        scheduled_date,
+        scheduled_time,
+        scheduled_timezone,
+        new Date(created_at).toISOString(),
+        new Date(updated_at).toISOString()
+      );
+  
       if (!result) {
         return res.status(400).json({
           success: false,
@@ -63,6 +102,7 @@ class CampaignsController {
       });
     }
   }
+  
   // Get campaign creator
   static async getCampaignCreator(req, res) {
     const { id } = req.params;
@@ -204,13 +244,72 @@ class CampaignsController {
   }
 
   // Update campaign
+  // static async updateCampaign(req, res) {
+  //   const { id } = req.params;
+  //   const {
+  //     subject,
+  //     content,
+  //     type,
+  //     status,
+  //     segment_id,
+  //     user_id,
+  //     scheduled_datetime,
+  //     scheduled_timezone,
+  //     scheduled_timezone_offset,
+  //     scheduled_timezone_offset_value,
+  //     scheduled_timezone_offset_type,
+  //     scheduled_timezone_offset_sign,
+  //     created_at,
+  //     updated_at,
+  //   } = req.body;
+
+  //   try {
+  //     const result = await Campaigns.updateCampaign( id,
+  //       subject,
+  //       content,
+  //       type,
+  //       status,
+  //       segment_id,
+  //       user_id,
+  //       scheduled_datetime,
+  //       scheduled_timezone,
+  //       scheduled_timezone_offset,
+  //       scheduled_timezone_offset_value,
+  //       scheduled_timezone_offset_type,
+  //       scheduled_timezone_offset_sign,
+  //       created_at,
+  //       updated_at);
+
+  //     if (!result) {
+  //       return res.status(400).json({
+  //         success: false,
+  //         status: 400,
+  //         message: "Campaign not updated",
+  //       });
+  //     }
+
+  //     return res.status(200).json({
+  //       success: true,
+  //       status: 200,
+  //       message: "Campaign updated",
+  //       data: result,
+  //     });
+  //   } catch (error) {
+  //     return res.status(500).json({
+  //       success: false,
+  //       status: 500,
+  //       message: error.message,
+  //     });
+  //   }
+  // }
+
   static async updateCampaign(req, res) {
     const { id } = req.params;
-    const { name, content, scheduled_time, segment_id } = req.body;
-
+    const updateData = req.body;
+  
     try {
-      const result = await Campaigns.updateCampaign(id, name, content, scheduled_time, segment_id);
-
+      const result = await Campaigns.updateCampaign(id, updateData);
+  
       if (!result) {
         return res.status(400).json({
           success: false,
@@ -218,7 +317,7 @@ class CampaignsController {
           message: "Campaign not updated",
         });
       }
-
+  
       return res.status(200).json({
         success: true,
         status: 200,
@@ -233,6 +332,7 @@ class CampaignsController {
       });
     }
   }
+  
 
   // Delete campaign
   static async deleteCampaign(req, res) {

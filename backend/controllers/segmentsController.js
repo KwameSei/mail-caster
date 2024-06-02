@@ -60,7 +60,7 @@ class SegmentsController {
       });
     }
   }
-  
+
   // Get all segments
   static async getSegments(req, res) {
     try {

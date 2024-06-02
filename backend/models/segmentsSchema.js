@@ -20,7 +20,7 @@ class Segments {
 
     try {
       await segmentsSchema.validate(segment);
-      const segmentId = await connection("segments").insert(segment);
+      const [segmentId] = await connection("segments").insert(segment, "id"); // The first element
       
       const result = await connection("segments").where("id", segmentId).first();
 
